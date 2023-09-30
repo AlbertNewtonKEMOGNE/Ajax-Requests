@@ -1,0 +1,59 @@
+* {
+    text-align: center;
+}
+
+input {
+    text-align: start;
+}
+
+body {
+    background-color: #ddd;
+}
+
+.container {
+    margin: 1%;
+    width: 96%;
+    height: 92vh;
+    border-radius: 12px;
+    display: flex;
+    padding: 1%;
+    background: white;
+}
+
+.alerts {
+    width: 45%;
+}
+
+.inputs {
+    width: 45%;
+    background: #ccaaff;
+    border-radius: 20px;
+    text-align: start;
+    padding-left: 5%;
+}
+
+h1 {
+    text-align: start;
+    color: blue;
+}
+
+button {
+    margin-top: 7%;
+    height: 10%;
+}
+
+.submit {
+    background-color: aqua;
+    width: 93%;
+    border-radius: 12px;
+    font-size: 1.8rem;
+}
+
+input {
+    width: 90%;
+    border-radius: 12px;
+    border: 1px solid #115599;
+    height: 6%;
+    padding-left: 3%;
+    font-size: 1.6rem;
+}

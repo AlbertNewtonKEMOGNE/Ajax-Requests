@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pay your fees</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="../donnees/script.js"></script>
+    <script src="../donnees/jquery-3.6.0.js"></script>
+</head>
+
+<body onload="refresh()">
+    <div class="container">
+        <div class="inputs">
+            <h1>First-Name : </h1>
+            <input type="text" id="first_name" placeholder="First-Name" value="">
+            <h1>Name : </h1>
+            <input type="text" id="name" placeholder="Name" value="">
+            <h1>Email :</h1>
+            <input type="email" id="email" placeholder="Email" value="">
+            <h1>Phone :</h1>
+            <input type="tel" id="phone" placeholder="Phone number" value="">
+
+            <button class="submit" onclick="validate()">Submit</button>
+            <br>
+            <span id="text_under_submit"></span>
+        </div>
+        <div class="alerts" id="div_alerts">
+            <h2>Waiting...</h2>
+        </div>
+        <div class="showBtn" id="hideDiv">
+            <button class="submit" onclick="database()">Show All</button>
+
+            <h2>Enter index to delete</h2>
+            <input type="text" id="index" placeholder="Index to delete">
+            <button class="submit" style="background-color: #ff2200;" onclick="drop()">Delete</button>
+            <div class="delete_res" id="delete_res"></div>
+
+            <h2>Enter index to Update</h2>
+            <input type="text" id="index_update" placeholder="Index to update">
+            <button class="submit" style="background-color: #a2edf3;" onclick="update()">Update</button>
+            <div class="update_res" id="update_res"></div>
+
+        </div>
+    </div>
+    <script type="text/javascript">
+        let to_database = (v1, v2, v3, v4) => {
+
+            //alert(v1 + v2 + v3 + v4);
+
+            v_index = document.getElementById('index_update');
+
+            if (v_index.disabled == true) index1 = document.getElementById('index_update').value;
+            if (v_index.disabled == false) index1 = "m";
+
+
+            $.ajax({
+                type: "POST",
+                url: "../traitement/db_insertion.php",
+                data: {
+                    index: index1,
+                    first_name: v1,
+                    name: v2,
+                    email: v3,
+                    contact: v4
+                },
+                success: function(response) {
+                    $('#div_alerts').html(response);
+                }
+            });
+            document.getElementById('index_update').disabled = false;
+
+        }
+        let database = () => {
+            //alert('trying');
+            $.ajax({
+                type: "POST",
+                url: "../traitement/db_retreive.php",
+                data: {},
+                success: function(response) {
+                    $('#div_alerts').html(response);
+                }
+            });
+        }
+        let drop = () => {
+            //alert('trying');
+            $.ajax({
+                type: "POST",
+                url: "../traitement/db_delete.php",
+                data: {
+                    index: document.getElementById('index').value
+                },
+                success: function(response) {
+                    database();
+                    $('#delete_res').html(response);
+                    document.getElementById('index').value = "";
+                }
+            });
+        }
+        let update = () => {
+            //alert('trying');
+            $.ajax({
+                type: "POST",
+                url: "../traitement/db_update.php",
+                data: {
+                    index: document.getElementById('index_update').value
+                },
+                success: function(response) {
+
+                    try {
+                        JSON.parse(response);
+                        res = true;
+                    } catch (error) {
+                        res = false;
+                    }
+
+                    if (!res) {
+                        $('#div_alerts').html(response);
+                        document.getElementById('index_update').value = "";
+                        refresh();
+                    }
+                    if (res) {
+
+                        response = JSON.parse(response);
+
+                        document.getElementById('first_name').value = response['first_name'];
+                        document.getElementById('name').value = response['user_name'];
+                        document.getElementById('email').value = response['email'];
+                        document.getElementById('phone').value = response['contact'];
+                        document.getElementById('index_update').disabled = true;
+                        database();
+                    }
+
+
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
